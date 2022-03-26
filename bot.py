@@ -44,7 +44,7 @@ def top(update: Update, context: CallbackContext) -> None:
     else:
         message = "Главные пиздаболы:\n"
         for i, item in enumerate(result):
-            reply_message += f"{i + 1}. {item[0].strip()} – {item[1]} слов\n"
+            message += f"{i + 1}. {item[0].strip()} – {item[1]} слов\n"
 
         update.message.reply_text(message)
             
@@ -82,7 +82,7 @@ def check_if_user_exists(user_id, username):
         db_connection.commit()
 
 def get_count(user_id):
-    db_object.execute(f"SELECT message_count, word_count FROM users WHERE id = {user_id}")
+    db_object.execute(f"SELECT message_count as message_count, word_count as word_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
 def update_count(user_id, word_count):
