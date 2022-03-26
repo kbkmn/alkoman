@@ -16,7 +16,6 @@ bot.
 """
 
 import logging
-import os
 
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
@@ -27,7 +26,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-PORT = int(os.environ.get('PORT', 5000))
+PORT = 5000
 TOKEN = '5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc'
 
 # Define a few command handlers. These usually take the two arguments update and
