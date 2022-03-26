@@ -16,10 +16,9 @@ bot.
 """
 
 import logging
-import os
 
 TOKEN = '5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc'
-PORT = int(os.environ.get('PORT', '8443'))
+PORT = 8443
 
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
@@ -68,7 +67,7 @@ def main() -> None:
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     # Start the Bot
-    updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
+    updater.start_webhook(listen="127.0.0.1", port=PORT, url_path=TOKEN)
     updater.bot.setWebhook('https://aqueous-tor-53426.herokuapp.com/' + TOKEN)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
