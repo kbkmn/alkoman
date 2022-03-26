@@ -61,6 +61,8 @@ def stats(update: Update, context: CallbackContext) -> None:
         reply_markup=ForceReply(selective=True),
     )
 
+def help(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("Иди на хуй!")
 
 def count(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
@@ -93,6 +95,7 @@ def main() -> None:
 
     dispatcher.add_handler(CommandHandler("top", top))
     dispatcher.add_handler(CommandHandler("stats", stats))
+    dispatcher.add_handler(CommandHandler("help", help))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, count))
 
