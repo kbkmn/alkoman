@@ -56,13 +56,16 @@ def stats(update: Update, context: CallbackContext) -> None:
     message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
     word_count = '%s %s' % (int(result[0]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
 
-    update.message.reply_markdown_v2(
-        fr'{user.mention_markdown_v2()}, ты напездел {message_count} – {word_count}',
-        reply_markup=ForceReply(selective=True),
-    )
+    update.message.reply_text(f"{user.mention_markdown_v2()}, ты напездел {message_count} – {word_count}")
+
+    # update.message.reply_markdown_v2(
+    #     fr'{user.mention_markdown_v2()}, ты напездел {message_count} – {word_count}',
+    #     reply_markup=ForceReply(selective=True),
+    # )
 
 def help(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("Иди на хуй!")
+    user = update.effective_user
+    update.message.reply_text(f"Иди на хуй! first_name: {user.first_name}, last_name: {user.last_name}, username: {user.username}")
 
 def count(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
