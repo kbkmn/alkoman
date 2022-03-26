@@ -54,7 +54,7 @@ def stats(update: Update, context: CallbackContext) -> None:
 
     result = get_count(user.id)
     message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
-    word_count = '%s %s' % (int(result[0]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
+    word_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
 
     update.message.reply_text(f"{user.first_name}, ты напездел {message_count} – {word_count}")
 
