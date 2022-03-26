@@ -17,57 +17,76 @@ bot.
 
 import logging
 import os
+import psycopg2
 
-TOKEN = '5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc'
+TOKEN = "5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc"
 PORT = int(os.environ.get("PORT", "8443"))
+DB_URI = "postgres://autbcwmqanqzil:f0ec489225f5d2b112f0f835f3fbd00f731a68c5bb81a480bd7d985f4165f11e@ec2-44-194-92-192.compute-1.amazonaws.com:5432/ddt46vatb24f46"
 
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-# Enable logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 
 logger = logging.getLogger(__name__)
 
-# Define a few command handlers. These usually take the two arguments update and
-# context.
-def start(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /start is issued."""
+db_connection = psycopg2.connect(DB_URI, sslmode="require")
+db_object = db_connection.cursor()
+
+def top(update: Update, context: CallbackContext) -> None:
+    db_object.execute("SELECT username, word_count FROM users ORDER BY word_count DESC LIMIT 3")
+    result = db_object.fetchall()
+
+    if not result:
+        update.message.reply_text("Иди на хуй!")
+    else:
+        message = "Главные пиздаболы:\n"
+        for i, item in enumerate(result):
+            reply_message += f"{i + 1}. {item[0].strip()} – {item[1]} слов\n"
+
+        update.message.reply_text(message)
+            
+
+def stats(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
+
+    result = get_count(user.id)
+    message_count = int(result['message_count'])
+    word_count = int(result['message_count'])
+
     update.message.reply_markdown_v2(
-        fr'Hi {user.mention_markdown_v2()}\!',
+        fr'{user.mention_markdown_v2()}, ты напездел {message_count} сообщений и {word_count} слов',
         reply_markup=ForceReply(selective=True),
     )
 
 
-def help_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+def count(update: Update, context: CallbackContext) -> None:
+    user = update.effective_user
+    
+    words = update.message.text.strip().split()
+    word_count = len(list(filter(lambda value: len(value) >= 3, words)))
 
+    update_count(user.id, user.username, word_count)
 
-def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
+def get_count(user_id):
+    db_object.execute("SELECT message_count, word_count FROM users WHERE id = {user_id}")
+    return db_object.fetchone()
 
+def update_count(user_id, username, word_count):
+    db_object.execute(f"UPDATE users SET username = '{username}', message_count = (message_count + 1), word_count = (word_count + {word_count}) WHERE id = {user_id}")
+    db_connection.commit()
 
 def main() -> None:
-    """Start the bot."""
-    # Create the Updater and pass it your bot's token.
     updater = Updater(TOKEN)
-
-    # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
-    # on different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("help", help_command))
+    dispatcher.add_handler(CommandHandler("top", top))
+    dispatcher.add_handler(CommandHandler("stats", stats))
 
-    # on non command i.e message - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, count))
 
-    # Start the Bot
     updater.start_webhook(
         listen="0.0.0.0",
         port=PORT,
@@ -75,11 +94,7 @@ def main() -> None:
         webhook_url="https://aqueous-tor-53426.herokuapp.com/" + TOKEN
     )
 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
 
 if __name__ == '__main__':
     main()
