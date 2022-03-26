@@ -44,7 +44,7 @@ def top(update: Update, context: CallbackContext) -> None:
     else:
         message = "Главные пиздаболы:\n"
         for i, item in enumerate(result):
-            message += f"{i + 1}. {item[0].strip()} – {item[1]} слов\n"
+            message += f"{i + 1}. {item[0].strip()} – {'%s %s' % (int(item[1]), pluralize(int(item[1]), ['слово', 'слова', 'слов']))}\n"
 
         update.message.reply_text(message)
             
@@ -56,16 +56,11 @@ def stats(update: Update, context: CallbackContext) -> None:
     message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
     word_count = '%s %s' % (int(result[0]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
 
-    update.message.reply_text(f"{user.mention_markdown_v2()}, ты напездел {message_count} – {word_count}")
-
-    # update.message.reply_markdown_v2(
-    #     fr'{user.mention_markdown_v2()}, ты напездел {message_count} – {word_count}',
-    #     reply_markup=ForceReply(selective=True),
-    # )
+    update.message.reply_text(f"{user.first_name}, ты напездел {message_count} – {word_count}")
 
 def help(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
-    update.message.reply_text(f"Иди на хуй! first_name: {user.first_name}, last_name: {user.last_name}, username: {user.username}")
+    update.message.reply_text(f"Иди на хуй!")
 
 def count(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
@@ -73,7 +68,7 @@ def count(update: Update, context: CallbackContext) -> None:
     words = update.message.text.strip().split()
     word_count = len(list(filter(lambda value: len(value) >= 3, words)))
 
-    check_if_user_exists(user.id, user.username)
+    check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count)
 
 def check_if_user_exists(user_id, username):
