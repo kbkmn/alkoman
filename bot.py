@@ -82,7 +82,7 @@ def check_if_user_exists(user_id, username):
         db_connection.commit()
 
 def get_count(user_id):
-    db_object.execute("SELECT message_count, word_count FROM users WHERE id = {user_id}")
+    db_object.execute(f"SELECT message_count, word_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
 def update_count(user_id, word_count):
@@ -93,11 +93,11 @@ def main() -> None:
     updater = Updater(TOKEN)
     dispatcher = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler("top", top))
-    dispatcher.add_handler(CommandHandler("stats", stats))
-    dispatcher.add_handler(CommandHandler("help", help))
+    dispatcher.add_handler(CommandHandler("top", callback=top))
+    dispatcher.add_handler(CommandHandler("stats", callback=stats))
+    dispatcher.add_handler(CommandHandler("help", callback=help))
 
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, count))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
 
     updater.start_webhook(
         listen="0.0.0.0",
