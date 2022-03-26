@@ -26,14 +26,13 @@ def top(update: Update, context: CallbackContext) -> None:
     result = db_object.fetchall()
 
     if not result:
-        update.message.reply_text("Иди на хуй!")
+        update.effective_chat.send_message("Иди на хуй!")
     else:
         message = "Главные пиздаболы:\n"
         for i, item in enumerate(result):
             message += f"{i + 1}. {item[0].strip()} – {'%s %s' % (int(item[1]), pluralize(int(item[1]), ['слово', 'слова', 'слов']))}\n"
 
-        update.message.reply_text(message)
-            
+        update.effective_chat.send_message(message)
 
 def stat(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
@@ -41,16 +40,15 @@ def stat(update: Update, context: CallbackContext) -> None:
     result = get_count(user.id)
 
     if not result:
-        update.message.reply_text("Начинай пездеть, кузнечик!")
+        update.effective_chat.send_message("Начинай пездеть, кузнечик!")
     else:
         message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
         word_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
 
-        update.message.reply_text(f"{user.first_name}, ты напездел {message_count} – {word_count}")
+        update.effective_chat.send_message(f"{user.first_name}, ты напездел {message_count} – {word_count}")
 
 def help(update: Update, context: CallbackContext) -> None:
-    user = update.effective_user
-    update.message.reply_text(f"Иди на хуй!")
+    update.effective_chat.send_message(f"Иди на хуй!")
 
 def count(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
