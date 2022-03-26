@@ -53,8 +53,8 @@ def stats(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
 
     result = get_count(user.id)
-    message_count = int(result['message_count'])
-    word_count = int(result['message_count'])
+    message_count = int(result[0])
+    word_count = int(result[1])
 
     update.message.reply_markdown_v2(
         fr'{user.mention_markdown_v2()}, ты напездел {message_count} сообщений и {word_count} слов',
@@ -82,7 +82,7 @@ def check_if_user_exists(user_id, username):
         db_connection.commit()
 
 def get_count(user_id):
-    db_object.execute(f"SELECT message_count as message_count, word_count as word_count FROM users WHERE id = {user_id}")
+    db_object.execute(f"SELECT message_count, word_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
 def update_count(user_id, word_count):
