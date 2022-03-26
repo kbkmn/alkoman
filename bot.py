@@ -53,11 +53,11 @@ def stats(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
 
     result = get_count(user.id)
-    message_count = int(result[0])
-    word_count = int(result[1])
+    message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
+    word_count = '%s %s' % (int(result[0]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
 
     update.message.reply_markdown_v2(
-        fr'{user.mention_markdown_v2()}, ты напездел {message_count} сообщений и {word_count} слов',
+        fr'{user.mention_markdown_v2()}, ты напездел {message_count} – {word_count}',
         reply_markup=ForceReply(selective=True),
     )
 
@@ -107,6 +107,20 @@ def main() -> None:
     )
 
     updater.idle()
+
+def pluralize(number, forms):
+    number = abs(number) % 100
+
+    number_1 = number % 10
+
+    if number > 10 and number < 20:
+        return forms[2]
+    if number_1 > 1 and number_1 < 5:
+        return forms[1]
+    if number_1 == 1:
+        return forms[0]
+
+    return forms[2]
 
 if __name__ == '__main__':
     main()
