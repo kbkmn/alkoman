@@ -26,7 +26,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-PORT = 5000
+PORT = 8443
 TOKEN = '5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc'
 
 # Define a few command handlers. These usually take the two arguments update and
