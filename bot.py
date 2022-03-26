@@ -16,6 +16,10 @@ bot.
 """
 
 import logging
+import os
+
+TOKEN = '5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc'
+PORT = int(os.environ.get('PORT', '8443'))
 
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
@@ -26,8 +30,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-PORT = 8443
-TOKEN = '5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc'
 
 # Define a few command handlers. These usually take the two arguments update and
 # context.
