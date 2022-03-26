@@ -49,7 +49,7 @@ def top(update: Update, context: CallbackContext) -> None:
         update.message.reply_text(message)
             
 
-def stats(update: Update, context: CallbackContext) -> None:
+def stat(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
 
     result = get_count(user.id)
@@ -92,7 +92,7 @@ def main() -> None:
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("top", callback=top))
-    dispatcher.add_handler(CommandHandler("stats", callback=stats))
+    dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
