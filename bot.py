@@ -53,10 +53,14 @@ def stat(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
 
     result = get_count(user.id)
-    message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
-    word_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
 
-    update.message.reply_text(f"{user.first_name}, ты напездел {message_count} – {word_count}")
+    if not result:
+        update.message.reply_text("Начинай пездеть, кузнечик!")
+    else:
+        message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
+        word_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
+
+        update.message.reply_text(f"{user.first_name}, ты напездел {message_count} – {word_count}")
 
 def help(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
