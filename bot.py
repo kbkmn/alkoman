@@ -68,14 +68,23 @@ def count(update: Update, context: CallbackContext) -> None:
     words = update.message.text.strip().split()
     word_count = len(list(filter(lambda value: len(value) >= 3, words)))
 
-    update_count(user.id, user.username, word_count)
+    check_if_user_exists(user.id, user.username)
+    update_count(user.id, word_count)
+
+def check_if_user_exists(user_id, username):
+    db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
+    result = db_object.fetchone()
+
+    if not result:
+        db_object.execute("INSERT INTO users(id, username, message_count, word_count) VALUES (%s, %s, %s, %s)", (user_id, username, 0, 0))
+        db_connection.commit()
 
 def get_count(user_id):
     db_object.execute("SELECT message_count, word_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
-def update_count(user_id, username, word_count):
-    db_object.execute(f"UPDATE users SET username = '{username}', message_count = (message_count + 1), word_count = (word_count + {word_count}) WHERE id = {user_id}")
+def update_count(user_id, word_count):
+    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}) WHERE id = {user_id}")
     db_connection.commit()
 
 def main() -> None:
