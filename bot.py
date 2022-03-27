@@ -91,7 +91,7 @@ def inlinequery(update: Update, context: CallbackContext) -> None:
         InlineQueryResultArticle(
             id=str(uuid4()),
             title="Italic",
-            input_message_content=InputVenueMessageContent(55.777044, 37.555554),
+            input_message_content=InputVenueMessageContent(55.777044, 37.555554, 'title', 'address'),
         ),
         InlineQueryResultArticle(
             id=str(uuid4()),
