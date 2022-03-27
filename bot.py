@@ -99,8 +99,10 @@ def count(update: Update, context: CallbackContext) -> None:
     update_count(user.id, word_count, slur_count)
 
 def debug(update: Update, context: CallbackContext) -> None:
-    update.effective_chat.send_message(update.effective_chat.id)
-    update.effective_chat.send_message(update.message.chat_id)
+    # update.effective_chat.send_message(update.effective_chat.id)
+    # update.effective_chat.send_message(update.message.chat_id)
+    context.bot.send_message(-1001036605543, "group message")
+    context.bot.send_message(118248895, "creator message")
 
 def hello_world(context: CallbackContext) -> None:
     message = "hello world"
