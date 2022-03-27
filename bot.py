@@ -142,7 +142,7 @@ def main() -> None:
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("top", callback=top))
-    dispatcher.add_handler(CommandHandler("faggots", callback=top))
+    dispatcher.add_handler(CommandHandler("faggots", callback=faggots))
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
 
