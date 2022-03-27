@@ -24,7 +24,7 @@ db_connection = psycopg2.connect(DB_URI, sslmode="require")
 db_object = db_connection.cursor()
 
 def top(update: Update, context: CallbackContext) -> None:
-    db_object.execute("SELECT username, word_count, slur_count FROM users ORDER BY word_count DESC LIMIT 3")
+    db_object.execute("SELECT username, word_count FROM users ORDER BY word_count DESC LIMIT 3")
     result = db_object.fetchall()
 
     if not result:
@@ -72,7 +72,7 @@ def check_if_user_exists(user_id, username):
         db_connection.commit()
 
 def get_count(user_id):
-    db_object.execute(f"SELECT message_count, word_count FROM users WHERE id = {user_id}")
+    db_object.execute(f"SELECT message_count, word_count, slur_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
 def update_count(user_id, word_count, slur_count):
