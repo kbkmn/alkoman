@@ -3,10 +3,9 @@
 
 import logging
 import os
-from urllib import response
 import psycopg2
 import re
-from uuid import uuid4
+import datetime
 
 from profanity import *
 
@@ -99,61 +98,12 @@ def count(update: Update, context: CallbackContext) -> None:
     check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count, slur_count)
 
-
-    # U+1F1FA U+1F1E6
-
-# def inlinequery(update: Update, context: CallbackContext) -> None:
-#     query = update.inline_query.query
-
-#     if query == "":
-#         return
-
-#     results = [
-#          InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="U+1F1FA",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="U+1F1E6",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="\U0001F1FA",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="\U0001F1E6",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="\U+1F1FA",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="\U+1F1E6",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#     ]
-
-#     update.inline_query.answer(results)
-
 def debug(update: Update, context: CallbackContext) -> None:
-    db_object.execute(f"SELECT gender FROM users WHERE id = 213533559")
-    result = db_object.fetchone()
+    update.effective_chat.send_message(update.effective_chat.id)
 
-    update.effective_chat.send_message(result[0])
-
-    db_object.execute(f"SELECT gender FROM users WHERE id = 159547059")
-    result = db_object.fetchone()
-
-    update.effective_chat.send_message(result[0])
-
+def hello_world(context: CallbackContext) -> None:
+    message = "hello world"
+    # context.bot.send_message(chat_id=1, text=message)
 
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
@@ -179,6 +129,7 @@ def update_count(user_id, word_count, slur_count):
 
 def main() -> None:
     updater = Updater(TOKEN)
+    job_queue = updater.job_queue
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("top", callback=top))
@@ -187,9 +138,12 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("help", callback=help))
     dispatcher.add_handler(CommandHandler("debug", debug))
 
-    # dispatcher.add_handler(InlineQueryHandler(inlinequery))
-
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
+
+    for job in job_queue.jobs():
+        job.schedule_removal()
+
+    # job_queue.run_daily(hello_world, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=16, minute=50, second=00))
 
     updater.start_webhook(
         listen="0.0.0.0",
