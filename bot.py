@@ -3,6 +3,7 @@
 
 import logging
 import os
+from turtle import up
 import psycopg2
 
 from profanity import *
@@ -55,13 +56,24 @@ def help(update: Update, context: CallbackContext) -> None:
 
 def count(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
+
+    message = update.message.text.strip()
+
+    if check_for_kadyrov(message):
+        update.effective_chat.send_message(f"Извините")
     
-    words = update.message.text.strip().split()
+    words = message.split()
     word_count = len(list(filter(lambda value: len(value) >= 3, words)))
-    slur_count = check_for_profanity(update.message.text.strip())
+    slur_count = check_for_profanity(message)
 
     check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count, slur_count)
+
+def check_for_kadyrov(message):
+    if re.search(r'к[ао]дыров', message, re.I)
+        return true
+    
+    return false
 
 def check_if_user_exists(user_id, username):
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
