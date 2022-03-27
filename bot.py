@@ -106,16 +106,6 @@ def inlinequery(update: Update, context: CallbackContext) -> None:
         ),
         InlineQueryResultArticle(
             id=str(uuid4()),
-            title="\U0001F1FA",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="\U0001F1E6",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
             title="\U+1F1FA",
             input_message_content=InputTextMessageContent(query.upper()),
         ),
