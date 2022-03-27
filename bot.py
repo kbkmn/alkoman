@@ -3,8 +3,8 @@
 
 import logging
 import os
-from turtle import up
 import psycopg2
+import re
 
 from profanity import *
 
@@ -70,10 +70,10 @@ def count(update: Update, context: CallbackContext) -> None:
     update_count(user.id, word_count, slur_count)
 
 def check_for_kadyrov(message):
-    if re.search(r'к[ао]дыров', message, re.I)
-        return true
+    if re.search(r'к[ао]дыров', message, re.I):
+        return True
     
-    return false
+    return False
 
 def check_if_user_exists(user_id, username):
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
