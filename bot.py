@@ -13,7 +13,7 @@ TOKEN = "5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc"
 PORT = int(os.environ.get("PORT", "8443"))
 DB_URI = "postgres://autbcwmqanqzil:f0ec489225f5d2b112f0f835f3fbd00f731a68c5bb81a480bd7d985f4165f11e@ec2-44-194-92-192.compute-1.amazonaws.com:5432/ddt46vatb24f46"
 
-from telegram import Update, InlineQueryResultArticle, InputTextMessageContent, ParseMode, InputLocationMessageConten, InputVenueMessageContent, InputContactMessageContent
+from telegram import Update, InlineQueryResultArticle, InputTextMessageContent, ParseMode, InputLocationMessageContent, InputVenueMessageContent, InputContactMessageContent
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, InlineQueryHandler
 from telegram.utils.helpers import escape_markdown
 
@@ -86,7 +86,7 @@ def inlinequery(update: Update, context: CallbackContext) -> None:
         InlineQueryResultArticle(
             id=str(uuid4()),
             title="Bold",
-            input_message_content=InputLocationMessageConten(55.777044, 37.555554)
+            input_message_content=InputLocationMessageContent(55.777044, 37.555554)
         ),
         InlineQueryResultArticle(
             id=str(uuid4()),
