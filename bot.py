@@ -3,6 +3,7 @@
 
 import logging
 import os
+from urllib import response
 import psycopg2
 import re
 from uuid import uuid4
@@ -87,36 +88,52 @@ def count(update: Update, context: CallbackContext) -> None:
 
     # U+1F1FA U+1F1E6
 
-def inlinequery(update: Update, context: CallbackContext) -> None:
-    query = update.inline_query.query
+# def inlinequery(update: Update, context: CallbackContext) -> None:
+#     query = update.inline_query.query
 
-    if query == "":
-        return
+#     if query == "":
+#         return
 
-    results = [
-         InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="U+1F1FA",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="U+1F1E6",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="\U+1F1FA",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="\U+1F1E6",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-    ]
+#     results = [
+#          InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="U+1F1FA",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="U+1F1E6",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="\U0001F1FA",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="\U0001F1E6",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="\U+1F1FA",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="\U+1F1E6",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#     ]
 
-    update.inline_query.answer(results)
+#     update.inline_query.answer(results)
+
+def debug(update: Update, context: CallbackContext) -> None:
+    resp = "U+1F1FA U+1F1E6 \U0001F1FA \U0001F1E6 \U+1F1FA \U+1F1E6"
+
+    update.effective_chat.send_message(resp.encode('utf-8'))
+
 
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
@@ -148,8 +165,9 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("faggots", callback=faggots))
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
+    dispatcher.add_handler(CommandHandler("debug", debug))
 
-    dispatcher.add_handler(InlineQueryHandler(inlinequery))
+    # dispatcher.add_handler(InlineQueryHandler(inlinequery))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
 
