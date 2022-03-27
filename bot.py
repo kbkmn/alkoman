@@ -60,7 +60,7 @@ def count(update: Update, context: CallbackContext) -> None:
     message = update.message.text.strip()
 
     if check_for_kadyrov(message):
-        update.effective_chat.send_message(f"Извините")
+        update.effective_chat.send_message(f"Извините дон")
     
     words = message.split()
     word_count = len(list(filter(lambda value: len(value) >= 3, words)))
