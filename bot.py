@@ -61,25 +61,28 @@ def stat(update: Update, context: CallbackContext) -> None:
     if not result:
         update.effective_chat.send_message("Начинай пездеть, кузнечик!")
     else:
-        # message_count = int(result[1])
-        # word_count = int(result[2])
-        # slur_count = int(result[3])
-        # gender = int(result[4])
+        message_count = int(result[1])
+        word_count = int(result[2])
+        slur_count = int(result[3])
+        male = result[4]
 
-        # if user.id == 213533559:
-        # else:
+        if user.id == 213533559:
+            message = f"{result[0]}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки) 🇺🇦"
+        else:
+            if male:
+                message = f"{result[0]}, ты напездел {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
+            else:
+                message = f"{result[0]}, ты напездела {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
 
-
-        # 🇺🇦
-
-        message_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['сообщение', 'сообщения', 'сообщений']))
-        word_count = '%s %s' % (int(result[2]), pluralize(int(result[3]), ['слово', 'слова', 'слов']))
-        slur_count = f"{result[3]} {pluralize(int(result[2]), ['слово', 'слова', 'слов'])} матершины"
-
-        update.effective_chat.send_message(f"{result[0]}, ты напездел {message_count} – {word_count} ({slur_count})")
+        update.effective_chat.send_message(message)
 
 def help(update: Update, context: CallbackContext) -> None:
-    update.effective_chat.send_message(f"Иди на хуй!")
+    user = update.effective_user
+
+    db_object.execute(f"SELECT username FROM users WHERE id = {user.id}")
+    result = db_object.fetchone()
+
+    update.effective_chat.send_message(f"{result[0]}, иди на хуй!")
 
 def count(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
