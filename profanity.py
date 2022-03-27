@@ -38,7 +38,6 @@ def check_for_profanity(phrase):
         for part in range(len(phrase)):
             fragment = phrase[part: part+len(word)]
             if levenshtein_distance(fragment, word) <= len(word)*0.25:
-                print("Найдено", word, "\nПохоже на", fragment)
                 found += 1
 
     return found
