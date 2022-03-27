@@ -5,6 +5,8 @@ import logging
 import os
 import psycopg2
 
+from profanity import *
+
 TOKEN = "5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc"
 PORT = int(os.environ.get("PORT", "8443"))
 DB_URI = "postgres://autbcwmqanqzil:f0ec489225f5d2b112f0f835f3fbd00f731a68c5bb81a480bd7d985f4165f11e@ec2-44-194-92-192.compute-1.amazonaws.com:5432/ddt46vatb24f46"
@@ -22,7 +24,7 @@ db_connection = psycopg2.connect(DB_URI, sslmode="require")
 db_object = db_connection.cursor()
 
 def top(update: Update, context: CallbackContext) -> None:
-    db_object.execute("SELECT username, word_count FROM users ORDER BY word_count DESC LIMIT 3")
+    db_object.execute("SELECT username, word_count, slur_count FROM users ORDER BY word_count DESC LIMIT 3")
     result = db_object.fetchall()
 
     if not result:
@@ -44,8 +46,9 @@ def stat(update: Update, context: CallbackContext) -> None:
     else:
         message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
         word_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
+        slur_count = f"{result[2]} {pluralize(int(result[2]), ['слово', 'слова', 'слов'])} матершины"
 
-        update.effective_chat.send_message(f"{user.first_name}, ты напездел {message_count} – {word_count}")
+        update.effective_chat.send_message(f"{user.first_name}, ты напездел {message_count} – {word_count} ({slur_count})")
 
 def help(update: Update, context: CallbackContext) -> None:
     update.effective_chat.send_message(f"Иди на хуй!")
@@ -55,9 +58,10 @@ def count(update: Update, context: CallbackContext) -> None:
     
     words = update.message.text.strip().split()
     word_count = len(list(filter(lambda value: len(value) >= 3, words)))
+    slur_count = check_for_profanity(update.message.text.strip())
 
     check_if_user_exists(user.id, user.first_name)
-    update_count(user.id, word_count)
+    update_count(user.id, word_count, slur_count)
 
 def check_if_user_exists(user_id, username):
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
@@ -71,8 +75,8 @@ def get_count(user_id):
     db_object.execute(f"SELECT message_count, word_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
-def update_count(user_id, word_count):
-    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}) WHERE id = {user_id}")
+def update_count(user_id, word_count, slur_count):
+    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}) WHERE id = {user_id}")
     db_connection.commit()
 
 def main() -> None:
