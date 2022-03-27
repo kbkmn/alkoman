@@ -84,36 +84,49 @@ def count(update: Update, context: CallbackContext) -> None:
     check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count, slur_count)
 
-# def inlinequery(update: Update, context: CallbackContext) -> None:
-#     query = update.inline_query.query
 
-#     if query == "":
-#         return
+    # U+1F1FA U+1F1E6
 
-#     results = [
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="Caps",
-#             input_message_content=InputTextMessageContent(query.upper()),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="Bold",
-#             input_message_content=InputLocationMessageContent(55.777044, 37.555554)
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="Italic",
-#             input_message_content=InputVenueMessageContent(55.777044, 37.555554, 'title', 'address'),
-#         ),
-#         InlineQueryResultArticle(
-#             id=str(uuid4()),
-#             title="Italic",
-#             input_message_content=InputContactMessageContent('+79265041551', 'Лох-пидор'),
-#         )
-#     ]
+def inlinequery(update: Update, context: CallbackContext) -> None:
+    query = update.inline_query.query
 
-#     update.inline_query.answer(results)
+    if query == "":
+        return
+
+    results = [
+         InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="U+1F1FA",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="U+1F1E6",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="\U0001F1FA",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="\U0001F1E6",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="\U+1F1FA",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="\U+1F1E6",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+    ]
+
+    update.inline_query.answer(results)
 
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
@@ -146,7 +159,7 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
 
-    # dispatcher.add_handler(InlineQueryHandler(inlinequery))
+    dispatcher.add_handler(InlineQueryHandler(inlinequery))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
 
