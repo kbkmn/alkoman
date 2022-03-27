@@ -101,12 +101,14 @@ def count(update: Update, context: CallbackContext) -> None:
 def debug(update: Update, context: CallbackContext) -> None:
     # update.effective_chat.send_message(update.effective_chat.id)
     # update.effective_chat.send_message(update.message.chat_id)
-    context.bot.send_message(-1001036605543, "group message")
-    context.bot.send_message(118248895, "creator message")
+    # context.bot.send_message(-1001036605543, "group message")
+    # context.bot.send_message(118248895, "creator message")
+    pass
 
-def hello_world(context: CallbackContext) -> None:
-    message = "hello world"
-    # context.bot.send_message(chat_id=1, text=message)
+def scheduler(context: CallbackContext) -> None:
+    message = "right on time"
+    vodka_chat_id=-1001036605543
+    context.bot.send_message(vodka_chat_id, text=message)
 
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
@@ -146,7 +148,7 @@ def main() -> None:
     for job in job_queue.jobs():
         job.schedule_removal()
 
-    # job_queue.run_daily(hello_world, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=16, minute=50, second=00))
+    job_queue.run_daily(scheduler, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=14, minute=00, second=00))
 
     updater.start_webhook(
         listen="0.0.0.0",
