@@ -130,7 +130,7 @@ def count(update: Update, context: CallbackContext) -> None:
 #     update.inline_query.answer(results)
 
 def debug(update: Update, context: CallbackContext) -> None:
-    resp = "U+1F1FA U+1F1E6 \U0001F1FA \U0001F1E6 \U+1F1FA \U+1F1E6".encode('utf-8')
+    resp = "😑"
 
     update.effective_chat.send_message(resp)
 
