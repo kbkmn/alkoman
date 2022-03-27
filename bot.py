@@ -45,11 +45,11 @@ def stat(update: Update, context: CallbackContext) -> None:
     if not result:
         update.effective_chat.send_message("Начинай пездеть, кузнечик!")
     else:
-        message_count = '%s %s' % (int(result[0]), pluralize(int(result[0]), ['сообщение', 'сообщения', 'сообщений']))
-        word_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['слово', 'слова', 'слов']))
-        slur_count = f"{result[2]} {pluralize(int(result[2]), ['слово', 'слова', 'слов'])} матершины"
+        message_count = '%s %s' % (int(result[1]), pluralize(int(result[1]), ['сообщение', 'сообщения', 'сообщений']))
+        word_count = '%s %s' % (int(result[2]), pluralize(int(result[3]), ['слово', 'слова', 'слов']))
+        slur_count = f"{result[3]} {pluralize(int(result[2]), ['слово', 'слова', 'слов'])} матершины"
 
-        update.effective_chat.send_message(f"{user.first_name}, ты напездел {message_count} – {word_count} ({slur_count})")
+        update.effective_chat.send_message(f"{result[0]}, ты напездел {message_count} – {word_count} ({slur_count})")
 
 def help(update: Update, context: CallbackContext) -> None:
     update.effective_chat.send_message(f"Иди на хуй!")
@@ -84,7 +84,7 @@ def check_if_user_exists(user_id, username):
         db_connection.commit()
 
 def get_count(user_id):
-    db_object.execute(f"SELECT message_count, word_count, slur_count FROM users WHERE id = {user_id}")
+    db_object.execute(f"SELECT username, message_count, word_count, slur_count FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
 def update_count(user_id, word_count, slur_count):
