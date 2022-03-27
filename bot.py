@@ -39,6 +39,19 @@ def top(update: Update, context: CallbackContext) -> None:
 
         update.effective_chat.send_message(message)
 
+def faggots(update: Update, context: CallbackContext) -> None:
+    db_object.execute("SELECT username, slur_count FROM users ORDER BY slur_count DESC LIMIT 3")
+    result = db_object.fetchall()
+
+    if not result:
+        update.effective_chat.send_message("Иди на хуй!")
+    else:
+        message = "Главные матершинники:\n"
+        for i, item in enumerate(result):
+            message += f"{i + 1}. {item[0].strip()} – {'%s %s' % (int(item[1]), pluralize(int(item[1]), ['слово', 'слова', 'слов']))}\n"
+
+        update.effective_chat.send_message(message)
+
 def stat(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
 
@@ -71,36 +84,36 @@ def count(update: Update, context: CallbackContext) -> None:
     check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count, slur_count)
 
-def inlinequery(update: Update, context: CallbackContext) -> None:
-    query = update.inline_query.query
+# def inlinequery(update: Update, context: CallbackContext) -> None:
+#     query = update.inline_query.query
 
-    if query == "":
-        return
+#     if query == "":
+#         return
 
-    results = [
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Caps",
-            input_message_content=InputTextMessageContent(query.upper()),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Bold",
-            input_message_content=InputLocationMessageContent(55.777044, 37.555554)
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Italic",
-            input_message_content=InputVenueMessageContent(55.777044, 37.555554, 'title', 'address'),
-        ),
-        InlineQueryResultArticle(
-            id=str(uuid4()),
-            title="Italic",
-            input_message_content=InputContactMessageContent('+79265041551', 'Лох-пидор'),
-        )
-    ]
+#     results = [
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="Caps",
+#             input_message_content=InputTextMessageContent(query.upper()),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="Bold",
+#             input_message_content=InputLocationMessageContent(55.777044, 37.555554)
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="Italic",
+#             input_message_content=InputVenueMessageContent(55.777044, 37.555554, 'title', 'address'),
+#         ),
+#         InlineQueryResultArticle(
+#             id=str(uuid4()),
+#             title="Italic",
+#             input_message_content=InputContactMessageContent('+79265041551', 'Лох-пидор'),
+#         )
+#     ]
 
-    update.inline_query.answer(results)
+#     update.inline_query.answer(results)
 
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
@@ -129,10 +142,11 @@ def main() -> None:
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("top", callback=top))
+    dispatcher.add_handler(CommandHandler("faggots", callback=top))
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
 
-    dispatcher.add_handler(InlineQueryHandler(inlinequery))
+    # dispatcher.add_handler(InlineQueryHandler(inlinequery))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
 
