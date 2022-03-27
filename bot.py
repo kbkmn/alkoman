@@ -5,6 +5,7 @@ import logging
 import os
 import psycopg2
 import re
+from uuid import uuid4
 
 from profanity import *
 
@@ -12,8 +13,9 @@ TOKEN = "5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc"
 PORT = int(os.environ.get("PORT", "8443"))
 DB_URI = "postgres://autbcwmqanqzil:f0ec489225f5d2b112f0f835f3fbd00f731a68c5bb81a480bd7d985f4165f11e@ec2-44-194-92-192.compute-1.amazonaws.com:5432/ddt46vatb24f46"
 
-from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram import Update, InlineQueryResultArticle, InputTextMessageContent, ParseMode
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, InlineQueryHandler
+from telegram.utils.helpers import escape_markdown
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -69,6 +71,36 @@ def count(update: Update, context: CallbackContext) -> None:
     check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count, slur_count)
 
+def inlinequery(update: Update, context: CallbackContext) -> None:
+    query = update.inline_query.query
+
+    if query == "":
+        return
+
+    results = [
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="Caps",
+            input_message_content=InputTextMessageContent(query.upper()),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="Bold",
+            input_message_content=InputTextMessageContent(
+                f"*{escape_markdown(query)}*", parse_mode=ParseMode.MARKDOWN
+            ),
+        ),
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="Italic",
+            input_message_content=InputTextMessageContent(
+                f"_{escape_markdown(query)}_", parse_mode=ParseMode.MARKDOWN
+            ),
+        ),
+    ]
+
+    update.inline_query.answer(results)
+
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
         return True
@@ -98,6 +130,8 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("top", callback=top))
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
+
+    dispatcher.add_handler(InlineQueryHandler(inlinequery))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
 
