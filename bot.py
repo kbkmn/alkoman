@@ -100,6 +100,7 @@ def count(update: Update, context: CallbackContext) -> None:
 
 def debug(update: Update, context: CallbackContext) -> None:
     update.effective_chat.send_message(update.effective_chat.id)
+    update.effective_chat.send_message(update.message.chat_id)
 
 def hello_world(context: CallbackContext) -> None:
     message = "hello world"
