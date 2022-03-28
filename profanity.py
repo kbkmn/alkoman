@@ -42,6 +42,25 @@ def check_for_profanity(phrase):
 
     return found
 
+def check_for_tennis(phrase):
+    found = 0
+    phrase = phrase.lower().replace(" ", "")
+
+
+    for key, value in replace_dictionary.items():
+        for letter in value:
+            for phr in phrase:
+                if letter == phr:
+                    phrase = phrase.replace(phr, key)
+
+    for word in ['теннис']:
+        for part in range(len(phrase)):
+            fragment = phrase[part: part+len(word)]
+            if levenshtein_distance(fragment, word) <= len(word)*0.25:
+                found += 1
+
+    return found
+
 replace_dictionary =   {'а' : ['а', 'a', '@'],
   'б' : ['б', '6', 'b'],
   'в' : ['в', 'b', 'v'],

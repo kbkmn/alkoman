@@ -38,9 +38,14 @@ def top(context: CallbackContext) -> None:
         for i, item in enumerate(result):
             message += f"{i + 1}. {item[0].strip()} – {'%s %s' % (int(item[1]), pluralize(int(item[1]), ['слово', 'слова', 'слов']))}\n"
 
+        db_object.execute("SELECT username, tennis_count_today FROM users WHERE id = 213533559")
+        result = db_object.fetchone()
+
+        message += f"{result[0]} воспомнил про теннис {result[1]} {pluralize(int(result[1]), ['раз', 'раза', 'раз'])}"
+
         context.bot.send_message(VODKA_CHAT_ID, message)
 
-    db_object.execute(f"UPDATE users SET word_count_today = 0")
+    db_object.execute(f"UPDATE users SET word_count_today = 0, tennis_count_today = 0")
     db_connection.commit()
 
 def faggots(update: Update, context: CallbackContext) -> None:
@@ -98,9 +103,10 @@ def count(update: Update, context: CallbackContext) -> None:
     words = message.split()
     word_count = len(list(filter(lambda value: len(value) >= 3, words)))
     slur_count = check_for_profanity(message)
+    tennis_count = check_for_tennis(message)
 
     check_if_user_exists(user.id, user.first_name)
-    update_count(user.id, word_count, slur_count)
+    update_count(user.id, word_count, slur_count, tennis_count)
 
 def debug(update: Update, context: CallbackContext) -> None:
     # update.effective_chat.send_message(update.effective_chat.id)
@@ -146,8 +152,8 @@ def get_count(user_id):
     db_object.execute(f"SELECT username, message_count, word_count, slur_count, gender FROM users WHERE id = {user_id}")
     return db_object.fetchone()
 
-def update_count(user_id, word_count, slur_count):
-    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}) WHERE id = {user_id}")
+def update_count(user_id, word_count, slur_count, tennis_count):
+    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}), tennis_count_todya = (tennis_count_today + {tennis_count}) WHERE id = {user_id}")
     db_connection.commit()
 
 def main() -> None:
