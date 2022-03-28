@@ -155,7 +155,7 @@ def get_count(user_id):
     return db_object.fetchone()
 
 def update_count(user_id, word_count, slur_count, tennis_count):
-    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}), tennis_count_todya = (tennis_count_today + {tennis_count}) WHERE id = {user_id}")
+    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}), tennis_count_today = (tennis_count_today + {tennis_count}) WHERE id = {user_id}")
     db_connection.commit()
 
 def main() -> None:
