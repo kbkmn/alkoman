@@ -102,7 +102,8 @@ def debug(update: Update, context: CallbackContext) -> None:
     # update.effective_chat.send_message(update.effective_chat.id)
     # update.effective_chat.send_message(update.message.chat_id)
     # context.bot.send_message(-1001036605543, "group message")
-    # context.bot.send_message(118248895, "creator message")
+    mention = f"[fucker](tg://user?id={118248895}) fuck you nigger"
+    context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
     pass
 
 def scheduler(context: CallbackContext) -> None:
@@ -148,7 +149,7 @@ def main() -> None:
     for job in job_queue.jobs():
         job.schedule_removal()
 
-    job_queue.run_daily(scheduler, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=14, minute=00, second=00))
+    job_queue.run_daily(scheduler, days=(5, ), time=datetime.time(hour=16, minute=00, second=00))
 
     updater.start_webhook(
         listen="0.0.0.0",
