@@ -12,6 +12,7 @@ from profanity import *
 TOKEN = "5270782462:AAFuIEkdog1H_zJi9FO-qIwPw3dOf8fl3oc"
 PORT = int(os.environ.get("PORT", "8443"))
 DB_URI = "postgres://autbcwmqanqzil:f0ec489225f5d2b112f0f835f3fbd00f731a68c5bb81a480bd7d985f4165f11e@ec2-44-194-92-192.compute-1.amazonaws.com:5432/ddt46vatb24f46"
+VODKA_CHAT_ID=-1001036605543
 
 from telegram import Update, InlineQueryResultArticle, InputTextMessageContent, ParseMode, InputLocationMessageContent, InputVenueMessageContent, InputContactMessageContent
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, InlineQueryHandler
@@ -26,18 +27,21 @@ logger = logging.getLogger(__name__)
 db_connection = psycopg2.connect(DB_URI, sslmode="require")
 db_object = db_connection.cursor()
 
-def top(update: Update, context: CallbackContext) -> None:
-    db_object.execute("SELECT username, word_count FROM users ORDER BY word_count DESC LIMIT 3")
+def top(context: CallbackContext) -> None:
+    db_object.execute("SELECT username, word_count_today FROM users ORDER BY word_count_today DESC LIMIT 3")
     result = db_object.fetchall()
 
     if not result:
-        update.effective_chat.send_message("Иди на хуй!")
+        context.bot.send_message(VODKA_CHAT_ID, "Иди на хуй!")
     else:
         message = "Главные пиздаболы:\n"
         for i, item in enumerate(result):
             message += f"{i + 1}. {item[0].strip()} – {'%s %s' % (int(item[1]), pluralize(int(item[1]), ['слово', 'слова', 'слов']))}\n"
 
-        update.effective_chat.send_message(message)
+        context.bot.send_message(VODKA_CHAT_ID, message)
+
+    db_object.execute(f"UPDATE users SET word_count_today = 0")
+    db_connection.commit()
 
 def faggots(update: Update, context: CallbackContext) -> None:
     db_object.execute("SELECT username, slur_count FROM users ORDER BY slur_count DESC LIMIT 3")
@@ -102,16 +106,27 @@ def debug(update: Update, context: CallbackContext) -> None:
     # update.effective_chat.send_message(update.effective_chat.id)
     # update.effective_chat.send_message(update.message.chat_id)
     # context.bot.send_message(-1001036605543, "group message")
-    mention = f"[fucker](tg://user?id={118248895}) fuck you nigger"
-    context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
 
-    mention = f"[fucker](tg://user?id={213533559}) fuck you nigger"
-    context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
+    # mention = f"[fucker](tg://user?id={118248895}) fuck you nigger"
+    # context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
+
+    # mention = f"[fucker](tg://user?id={213533559}) fuck you nigger"
+    # context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
+
+    pass
 
 def scheduler(context: CallbackContext) -> None:
-    message = "right on time"
-    vodka_chat_id=-1001036605543
-    context.bot.send_message(vodka_chat_id, text=message)
+    db_object.execute(f"SELECT id, username FROM users ORDER BY RANDOM()")
+    result = db_object.fetchall()
+
+    if not result:
+        context.bot.send_message(VODKA_CHAT_ID, "Хуй вам, а не опрос")
+    else:
+        message = "Конец дня наступил и конец рабочий недели вместе с ним. Рассказывайте, что у вас интересного случилось давайте, чего видели/слышали, есть ли движухи какие. В общем делитесь клёвым и неклёвым тоже\n"
+        for i, item in enumerate(result):
+            message += f"[{item[1]}](tg://user?id={item[0]}) "
+        
+        context.bot.send_message(chat_id=VODKA_CHAT_ID, text=message, parse_mode=ParseMode.MARKDOWN_V2)
 
 def check_for_kadyrov(message):
     if re.search(r'к[ао]дыров', message, re.I):
@@ -132,7 +147,7 @@ def get_count(user_id):
     return db_object.fetchone()
 
 def update_count(user_id, word_count, slur_count):
-    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}) WHERE id = {user_id}")
+    db_object.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}) WHERE id = {user_id}")
     db_connection.commit()
 
 def main() -> None:
@@ -140,11 +155,11 @@ def main() -> None:
     job_queue = updater.job_queue
     dispatcher = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler("top", callback=top))
-    dispatcher.add_handler(CommandHandler("faggots", callback=faggots))
+    # dispatcher.add_handler(CommandHandler("top", callback=top))
+    # dispatcher.add_handler(CommandHandler("faggots", callback=faggots))
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
-    dispatcher.add_handler(CommandHandler("debug", debug))
+    # dispatcher.add_handler(CommandHandler("debug", debug))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
 
@@ -152,6 +167,7 @@ def main() -> None:
         job.schedule_removal()
 
     job_queue.run_daily(scheduler, days=(5, ), time=datetime.time(hour=16, minute=00, second=00))
+    job_queue.run_daily(top, days=(0, 1, 2, 3, 4, 5, 6), time=datetime.time(hour=20, minute=59, second=00))
 
     updater.start_webhook(
         listen="0.0.0.0",
