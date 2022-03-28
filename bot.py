@@ -105,6 +105,8 @@ def count(update: Update, context: CallbackContext) -> None:
     slur_count = check_for_profanity(message)
     tennis_count = check_for_tennis(message)
 
+    print(f"FUCK YOU: {user.id} {user.first_name}")
+
     check_if_user_exists(user.id, user.first_name)
     update_count(user.id, word_count, slur_count, tennis_count)
 
