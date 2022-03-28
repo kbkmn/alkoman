@@ -104,7 +104,9 @@ def debug(update: Update, context: CallbackContext) -> None:
     # context.bot.send_message(-1001036605543, "group message")
     mention = f"[fucker](tg://user?id={118248895}) fuck you nigger"
     context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
-    pass
+
+    mention = f"[fucker](tg://user?id={213533559}) fuck you nigger"
+    context.bot.send_message(chat_id=118248895, text=mention, parse_mode=ParseMode.MARKDOWN_V2)
 
 def scheduler(context: CallbackContext) -> None:
     message = "right on time"
