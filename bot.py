@@ -161,10 +161,11 @@ def main() -> None:
     job_queue = updater.job_queue
     dispatcher = updater.dispatcher
 
-    # dispatcher.add_handler(CommandHandler("top", callback=top))
-    # dispatcher.add_handler(CommandHandler("faggots", callback=faggots))
     dispatcher.add_handler(CommandHandler("stat", callback=stat))
     dispatcher.add_handler(CommandHandler("help", callback=help))
+    
+    # dispatcher.add_handler(CommandHandler("top", callback=top))
+    # dispatcher.add_handler(CommandHandler("faggots", callback=faggots))
     # dispatcher.add_handler(CommandHandler("debug", debug))
 
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, callback=count))
