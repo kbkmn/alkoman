@@ -41,7 +41,7 @@ def top(context: CallbackContext) -> None:
         db_object.execute("SELECT username, tennis_count_today FROM users WHERE id = 213533559")
         result = db_object.fetchone()
 
-        message += f"{result[0]} воспомнил про теннис {result[1]} {pluralize(int(result[1]), ['раз', 'раза', 'раз'])}"
+        message += f"\n{result[0]} згадав про теніс {result[1]} {pluralize(int(result[1]), ['раз', 'рази', 'раз'])}"
 
         context.bot.send_message(VODKA_CHAT_ID, message)
 
