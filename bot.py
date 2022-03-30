@@ -74,7 +74,7 @@ def stat(update: Update, context: CallbackContext) -> None:
         slur_count = int(result[3])
         male = result[4]
 
-        if user.id in [213533559, 24805174, 70985155, 190219182]:
+        if user.id in [213533559, 24805174, 190219182]:
             message = f"{result[0]}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки) 🇺🇦"
         else:
             if male:
