@@ -15,7 +15,7 @@ class Database:
             self.__connection.commit()
 
     def get_user(self, user_id):
-        self.__cursor.execute(f"SELECT username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender FROM users WHERE id = {user_id}");
+        self.__cursor.execute(f"SELECT id, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender FROM users WHERE id = {user_id}");
 
         return self.__cursor.fetchone()
 
