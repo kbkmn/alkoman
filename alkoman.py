@@ -105,7 +105,7 @@ class Alkoman:
             
             self.bot.send_message(
                 chat.id,
-                f"{username}, иди на хуй\!"
+                f"{username}, иди на хуй\! () \n ., \n [ ]"
             )
 
 if __name__ == "__main__":
