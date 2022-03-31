@@ -101,9 +101,11 @@ class Alkoman:
         user = self.database.get_user(user.id)
 
         if user:
+            username = user['username']
+            
             self.bot.send_message(
                 chat.id,
-                f"{user['username']}, иди на хуй!"
+                f"{username}, иди на хуй!"
             )
 
 if __name__ == "__main__":

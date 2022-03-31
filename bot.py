@@ -17,6 +17,7 @@ class Bot:
         
         self.__updater = Updater(token)
         self.__bot = self.__updater.bot
+        
         self.__setup_job_queue()
         self.__setup_dispatcher()
 
@@ -39,7 +40,8 @@ class Bot:
         self.__job_queue.run_daily(callback, days=days, time=time)
 
     def send_message(self, chat_id, message):
-        self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
+        print("everything is all right")
+        # self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
 
     def run(self):
         # self.__updater.start_polling()
