@@ -16,6 +16,7 @@ class Bot:
         self.on_message_recieved = on_message_recieved
         
         self.__updater = Updater(token)
+        self.__bot = self.__updater.bot
         
         self.__setup_job_queue()
         self.__setup_dispatcher()
@@ -39,12 +40,7 @@ class Bot:
         self.__job_queue.run_daily(callback, days=days, time=time)
 
     def send_message(self, chat_id, message):
-        # print(f"chat id: {chat_id}\nmessage: {message}")
-        if not self.__bot:
-            print("no fucking bot :((")
-        else:
-            # self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
-            self.__bot.send_message(chat_id=chat_id, text=message)
+        self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
 
     def run(self):
         # self.__updater.start_polling()
@@ -55,7 +51,5 @@ class Bot:
             url_path=self.token,
             webhook_url=self.webhook_url + self.token
         )
-
-        self.__bot = self.__updater.bot
 
         self.__updater.idle()
