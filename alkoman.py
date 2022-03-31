@@ -88,12 +88,12 @@ class Alkoman:
             male = user['gender']
 
             if user.id == valera_user_id:
-                message = f"{username}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} \({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки\) 🇺🇦"
+                message = f"{username}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки) 🇺🇦"
             else:
                 if male:
-                    message = f"{username}, ты напездел {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} \({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины\)"
+                    message = f"{username}, ты напездел {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
                 else:
-                    message = f"{username}, ты напездела {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} \({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины\)"
+                    message = f"{username}, ты напездела {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
 
             self.bot.send_message(chat.id, message)
 
@@ -105,7 +105,7 @@ class Alkoman:
             
             self.bot.send_message(
                 chat.id,
-                f"{username}, иди на хуй\! \(\) \n ., \n [ ]"
+                f"{username}, иди на хуй! ( ) \n . , \n [ ]"
             )
 
 if __name__ == "__main__":

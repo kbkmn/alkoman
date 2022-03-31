@@ -1,5 +1,6 @@
 from telegram import ParseMode
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.utils.helpers import escape_markdown
 
 class Bot:
     def __init__(
@@ -40,6 +41,7 @@ class Bot:
         self.__job_queue.run_daily(callback, days=days, time=time)
 
     def send_message(self, chat_id, message):
+        message = escape_markdown(message, version=2)
         self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
 
     def run(self):
