@@ -87,7 +87,7 @@ class Alkoman:
             slur_count = int(user['slur_count'])
             male = user['gender']
 
-            if user.id == valera_user_id:
+            if user['id'] == valera_user_id:
                 message = f"{username}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки) 🇺🇦"
             else:
                 if male:

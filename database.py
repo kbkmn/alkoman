@@ -25,7 +25,7 @@ class Database:
         return self.__cursor.fetchall()
 
     def get_top(self):
-        self.__cursor.execute("SELECT username, word_count_today FROM users ORDER BY word_count_today DESC LIMIT 3")
+        self.__cursor.execute("SELECT id, username, word_count_today FROM users ORDER BY word_count_today DESC LIMIT 3")
         
         result = self.__cursor.fetchall()
 
