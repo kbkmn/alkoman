@@ -40,8 +40,17 @@ class Bot:
     def add_job(self, days, time, callback):
         self.__job_queue.run_daily(callback, days=days, time=time)
 
-    def send_message(self, chat_id, message):
+    def send_message(self, chat_id, message, **kwargs):
         message = escape_markdown(message, version=2)
+        
+        if kwargs['mentions']:
+            mentions = ""
+
+            for id, username in kwargs['mentions']:
+                mentions += f"[{username}](tg://user?id={id}) "
+
+            message = f"{mentions}\{message}"
+
         self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
 
     def run(self):

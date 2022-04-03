@@ -64,15 +64,16 @@ class Alkoman:
     def weekend(self):
         chat_id = -1001036605543
         users = self.database.get_all_users()
+        mentions = {}
 
         if not users:
             self.bot.send_message(chat_id, "Хуй вам, а не опрос")
         else:
             message = "Конец дня наступил и конец рабочий недели вместе с ним. Рассказывайте, что у вас интересного случилось давайте, чего видели/слышали, есть ли движухи какие. В общем делитесь клёвым и неклёвым тоже\n"
             for i, item in enumerate(users):
-                message += f"[{item['username']}](tg://user?id={item['id']}) "
+                mentions[item['id']] = item['username']
             
-            self.bot.send_message(chat_id, message)
+            self.bot.send_message(chat_id, message, mentions=mentions)
 
     def stat(self, chat, user, message):
         user = self.database.get_user(user.id)
