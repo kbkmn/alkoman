@@ -7,12 +7,12 @@ class Database:
         self.__connection = psycopg2.connect(uri, sslmode="require")
         self.__cursor = self.__connection.cursor(cursor_factory=RealDictCursor)
 
-    def find_or_create_user(self, user_id, username):
+    def find_or_create_user(self, user_id, name, username):
         self.__cursor.execute(f"SELECT id FROM users WHERE id = {user_id}")
         result = self.__cursor.fetchone()
 
         if not result:
-            self.__cursor.execute("INSERT INTO users(id, username) VALUES (%s, %s)", (user_id, username))
+            self.__cursor.execute("INSERT INTO users(id, name, username) VALUES (%s, %s, %s)", (user_id, name, username))
             self.__connection.commit()
 
     def get_user(self, id=None, username=None):
@@ -23,18 +23,18 @@ class Database:
             field = 'username'
             value = username
 
-        self.__cursor.execute(f"SELECT id, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender, last_message FROM users WHERE {field} = '{value}'")
+        self.__cursor.execute(f"SELECT id, name, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender, last_message FROM users WHERE {field} = '{value}'")
 
         return self.__cursor.fetchone()
 
 
     def get_all_users(self):
-        self.__cursor.execute(f"SELECT id, username FROM users ORDER BY RANDOM()")
+        self.__cursor.execute(f"SELECT id, name, username FROM users ORDER BY RANDOM()")
         
         return self.__cursor.fetchall()
 
     def get_top(self):
-        self.__cursor.execute("SELECT id, username, word_count_today FROM users ORDER BY word_count_today DESC LIMIT 3")
+        self.__cursor.execute("SELECT id, name, username, word_count_today FROM users ORDER BY word_count_today DESC LIMIT 3")
         
         result = self.__cursor.fetchall()
 

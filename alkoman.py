@@ -36,7 +36,7 @@ class Alkoman:
         slur_count = check_for_words(SLURS, message)
         tennis_count = check_for_words(["теннис"], message)
 
-        self.database.find_or_create_user(user.id, user.first_name)
+        self.database.find_or_create_user(user.id, user.first_name, user.username)
         self.database.increment_stats(user.id, word_count, slur_count, tennis_count)
 
     def top(self):
