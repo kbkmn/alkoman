@@ -120,7 +120,7 @@ class Alkoman:
 
             if user:
                 if user['last_message']:
-                    difference = datetime.now() - user['last_message']
+                    difference = datetime.datetime.now() - user['last_message']
                     minutes = math.floor(difference.total_seconds() / 60)
                     hours = math.floor(minutes / 60)
                     days = math.floor(hours / 24)
