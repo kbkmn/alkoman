@@ -21,6 +21,7 @@ class Alkoman:
 
         self.bot.add_command("stat", self.stat)
         self.bot.add_command("help", self.help)
+        self.bot.add_command("idle", self.idle)
 
         self.bot.run()
 
@@ -108,6 +109,14 @@ class Alkoman:
                 chat.id,
                 f"{name}, иди на хуй!"
             )
+
+    def idle(self, chat, user, message):
+        user = self.database.get_user(user.id)
+
+        print("HERE YOU GO")
+        print(message)
+        print(user)
+        
 
 if __name__ == "__main__":
     Alkoman()

@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from datetime import datetime, timezone
 
 class Database:
     def __init__(self, uri):
@@ -15,7 +16,7 @@ class Database:
             self.__connection.commit()
 
     def get_user(self, user_id):
-        self.__cursor.execute(f"SELECT id, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender FROM users WHERE id = {user_id}");
+        self.__cursor.execute(f"SELECT id, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender, last_message FROM users WHERE id = {user_id}")
 
         return self.__cursor.fetchone()
 
@@ -35,5 +36,5 @@ class Database:
         return result
 
     def increment_stats(self, user_id, word_count, slur_count, tennis_count):
-        self.__cursor.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}), tennis_count_today = (tennis_count_today + {tennis_count}) WHERE id = {user_id}")
+        self.__cursor.execute(f"UPDATE users SET message_count = (message_count + 1), word_count = (word_count + {word_count}), slur_count = (slur_count + {slur_count}), word_count_today = (word_count_today + {word_count}), tennis_count_today = (tennis_count_today + {tennis_count}), last_message = now() WHERE id = {user_id}")
         self.__connection.commit()
