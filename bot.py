@@ -43,7 +43,7 @@ class Bot:
     def send_message(self, chat_id, message, **kwargs):
         message = escape_markdown(message, version=2)
         
-        if kwargs['mentions']:
+        if 'mentions' in kwargs:
             mentions = ""
 
             for id, username in kwargs['mentions']:
