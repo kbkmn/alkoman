@@ -46,8 +46,8 @@ class Bot:
         if 'mentions' in kwargs:
             mentions = ""
 
-            for id, username in kwargs['mentions']:
-                mentions += f"[{username}](tg://user?id={id}) "
+            for id, name in kwargs['mentions']:
+                mentions += f"[{name}](tg://user?id={id}) "
 
             message = f"{mentions}\{message}"
 

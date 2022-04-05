@@ -48,16 +48,16 @@ class Alkoman:
         else:
             message = "Главные пиздаболы:\n"
             for i, item in enumerate(users):
-                username = item['username']
+                name = item['name']
                 word_count_today = int(item['word_count_today'])
 
-                message += f"{i + 1}. {username} – {'%s %s' % (word_count_today, pluralize(word_count_today, ['слово', 'слова', 'слов']))}\n"
+                message += f"{i + 1}. {name} – {'%s %s' % (word_count_today, pluralize(word_count_today, ['слово', 'слова', 'слов']))}\n"
 
             if valera:
-                valera_username = valera['username']
+                valera_name = valera['name']
                 valera_tennis_count = int(valera['tennis_count_today'])
 
-                message += f"\n{valera_username} згадав про теніс {valera_tennis_count} {pluralize(valera_tennis_count, ['раз', 'рази', 'раз'])}"
+                message += f"\n{valera_name} згадав про теніс {valera_tennis_count} {pluralize(valera_tennis_count, ['раз', 'рази', 'раз'])}"
 
             self.bot.send_message(chat_id, message)
 
@@ -71,7 +71,7 @@ class Alkoman:
         else:
             message = "Конец дня наступил и конец рабочий недели вместе с ним. Рассказывайте, что у вас интересного случилось давайте, чего видели/слышали, есть ли движухи какие. В общем делитесь клёвым и неклёвым тоже\n"
             for i, item in enumerate(users):
-                mentions[item['id']] = item['username']
+                mentions[item['id']] = item['name']
             
             self.bot.send_message(chat_id, message, mentions=mentions)
 
@@ -82,19 +82,19 @@ class Alkoman:
         if not user:
             self.bot.send_message(chat.id, "Начинай пездеть, кузнечик!")
         else:
-            username = user['username']
+            name = user['name']
             message_count = int(user['message_count'])
             word_count = int(user['word_count'])
             slur_count = int(user['slur_count'])
             male = user['gender']
 
             if user['id'] == valera_user_id:
-                message = f"{username}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки) 🇺🇦"
+                message = f"{name}, ти надіслав {message_count} {pluralize(message_count, ['повідомлення', 'повідомлення', 'повідомлень'])} – {word_count} {pluralize(message_count, ['слово', 'слова', 'слiв'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слiв'])} матюки) 🇺🇦"
             else:
                 if male:
-                    message = f"{username}, ты напездел {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
+                    message = f"{name}, ты напездел {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
                 else:
-                    message = f"{username}, ты напездела {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
+                    message = f"{name}, ты напездела {message_count} {pluralize(message_count, ['сообщение', 'сообщения', 'сообщений'])} – {word_count} {pluralize(word_count, ['слово', 'слова', 'слов'])} ({slur_count} {pluralize(slur_count, ['слово', 'слова', 'слов'])} матершины)"
 
             self.bot.send_message(chat.id, message)
 
@@ -102,11 +102,11 @@ class Alkoman:
         user = self.database.get_user(user.id)
 
         if user:
-            username = user['username']
+            name = user['name']
             
             self.bot.send_message(
                 chat.id,
-                f"{username}, иди на хуй!"
+                f"{name}, иди на хуй!"
             )
 
 if __name__ == "__main__":
