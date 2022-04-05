@@ -129,10 +129,10 @@ class Alkoman:
                         message = "Разуй глаза!"
                     else:
                         message = f"{user['name']} последний раз писал " + ''.join([
-                            f"{days} {pluralize(days, ['день', 'дня', 'дней'])}" if days > 0 else '',
-                            f"{hours} {pluralize(hours, ['час', 'часа', 'часов'])}" if hours > 0 else '',
-                            f"{minutes} {pluralize(minutes, ['миунуту', 'минуты', 'минут'])}" if minutes > 0 else '',
-                            " назад"
+                            f"{days} {pluralize(days, ['день', 'дня', 'дней'])} " if days > 0 else '',
+                            f"{hours} {pluralize(hours, ['час', 'часа', 'часов'])} " if hours > 0 else '',
+                            f"{minutes} {pluralize(minutes, ['миунуту', 'минуты', 'минут'])} " if minutes > 0 else '',
+                            "назад"
                         ])
                 else:
                     message = "Давно молчит :("
