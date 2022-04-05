@@ -126,7 +126,7 @@ class Alkoman:
                     days = math.floor(hours / 24)
 
                     if minutes < 1:
-                        message = "Разуй глаза"
+                        message = "Разуй глаза!"
                     else:
                         message = f"{user['name']} последний раз писал " + ''.join([
                             f"{days} {pluralize(days, ['день', 'дня', 'дней'])}" if days > 0 else '',
@@ -135,7 +135,7 @@ class Alkoman:
                             " назад"
                         ])
                 else:
-                    message = "Ниебу!"
+                    message = "Давно молчит :("
             else:
                 message = "Это ещё кто?"
 
