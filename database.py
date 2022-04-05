@@ -15,10 +15,18 @@ class Database:
             self.__cursor.execute("INSERT INTO users(id, username) VALUES (%s, %s)", (user_id, username))
             self.__connection.commit()
 
-    def get_user(self, user_id):
-        self.__cursor.execute(f"SELECT id, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender, last_message FROM users WHERE id = {user_id}")
+    def get_user(self, id=None, username=None):
+        if id:
+            field = 'id'
+            value = id
+        else:
+            field = 'username'
+            value = username
+
+        self.__cursor.execute(f"SELECT id, username, message_count, word_count, slur_count, word_count_today, tennis_count_today, gender, last_message FROM users WHERE {field} = '{value}'")
 
         return self.__cursor.fetchone()
+
 
     def get_all_users(self):
         self.__cursor.execute(f"SELECT id, username FROM users ORDER BY RANDOM()")

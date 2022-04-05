@@ -1,5 +1,7 @@
 import os
 import datetime
+import re
+import math
 
 from settings import *
 from bot import Bot
@@ -41,7 +43,7 @@ class Alkoman:
         chat_id = -1001036605543
         valera_user_id = 213533559
 
-        valera = self.database.get_user(valera_user_id)
+        valera = self.database.get_user(id=valera_user_id)
         users = self.database.get_top()
 
         if not users:
@@ -77,7 +79,7 @@ class Alkoman:
             self.bot.send_message(chat_id, message, mentions=mentions)
 
     def stat(self, chat, user, message):
-        user = self.database.get_user(user.id)
+        user = self.database.get_user(id=user.id)
         valera_user_id = 213533559
 
         if not user:
@@ -100,7 +102,7 @@ class Alkoman:
             self.bot.send_message(chat.id, message)
 
     def help(self, chat, user, message):
-        user = self.database.get_user(user.id)
+        user = self.database.get_user(id=user.id)
 
         if user:
             name = user['name']
@@ -111,12 +113,33 @@ class Alkoman:
             )
 
     def idle(self, chat, user, message):
-        user = self.database.get_user(user.id)
+        match = re.match(r'^/idle @([^\s]+)', message)
 
-        print("HERE YOU GO")
-        print(message)
-        print(user)
-        
+        if match:
+            user = self.database.get_user(username=match[1])
+
+            if user:
+                if user['last_message']:
+                    difference = datetime.now() - user['last_message']
+                    minutes = math.floor(difference.total_seconds() / 60)
+                    hours = math.floor(minutes / 60)
+                    days = math.floor(hours / 24)
+
+                    if minutes < 1:
+                        message = "Разуй глаза"
+                    else:
+                        message = f"{user['name']} последний раз писал " + ''.join(
+                            f"{days} {pluralize(days, ['день', 'дня', 'дней'])}" if days > 0 else '',
+                            f"{hours} {pluralize(hours, ['час', 'часа', 'часов'])}" if hours > 0 else '',
+                            f"{minutes} {pluralize(minutes, ['миунуту', 'минуты', 'минут'])}" if minutes > 0 else '',
+                            " назад"
+                        )
+                else:
+                    message = "Ниебу!"
+            else:
+                message = "Это ещё кто?"
+
+            self.bot.send_message(chat.id, message)
 
 if __name__ == "__main__":
     Alkoman()
