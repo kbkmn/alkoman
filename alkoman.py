@@ -121,9 +121,11 @@ class Alkoman:
             if user:
                 if user['last_message']:
                     difference = datetime.datetime.now() - user['last_message']
-                    minutes = math.floor(difference.total_seconds() / 60)
-                    hours = math.floor(minutes / 60)
-                    days = math.floor(hours / 24)
+                    
+                    seconds = difference.total_seconds()
+                    minutes = math.floor(seconds / 60) % 60
+                    hours = math.floor(seconds / 60 / 60) % 24
+                    days = math.floor(seconds / 60 / 60 / 24)
 
                     if minutes < 1:
                         message = "Разуй глаза!"
