@@ -44,11 +44,9 @@ class Bot:
         message = escape_markdown(message, version=2)
         
         if 'mentions' in kwargs:
-            print("there is mentions in kwargs")
-
             mentions = ""
 
-            for id, name in kwargs['mentions']:
+            for id, name in kwargs['mentions'].items():
                 mentions += f"[{name}](tg://user?id={id}) "
 
             message = f"{mentions}\n{message}"
