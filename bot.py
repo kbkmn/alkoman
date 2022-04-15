@@ -40,7 +40,7 @@ class Bot:
     def add_job(self, days, time, callback):
         self.__job_queue.run_daily(callback, days=days, time=time)
 
-    def send_message(self, chat_id, message, **kwargs):
+    def send_message(self, chat_id, message, *args, **kwargs):
         message = escape_markdown(message, version=2)
         
         if 'mentions' in kwargs:
