@@ -44,12 +44,14 @@ class Bot:
         message = escape_markdown(message, version=2)
         
         if 'mentions' in kwargs:
+            print("there is mentions in kwargs")
+
             mentions = ""
 
             for id, name in kwargs['mentions']:
                 mentions += f"[{name}](tg://user?id={id}) "
 
-            message = f"{mentions}\{message}"
+            message = f"{mentions}\n{message}"
 
         self.__bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN_V2)
 

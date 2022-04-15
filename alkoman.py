@@ -19,7 +19,7 @@ class Alkoman:
         self.database = Database(POSTGRESQL_DB_URI)
 
         self.bot.add_job((0, 1, 2, 3, 4, 5, 6), datetime.time(hour=20, minute=59, second=00), lambda context: self.top())
-        self.bot.add_job((4, ), datetime.time(hour=17, minute=53, second=00), lambda context: self.weekend())
+        self.bot.add_job((4, ), datetime.time(hour=17, minute=57, second=00), lambda context: self.weekend())
 
         self.bot.add_command("stat", self.stat)
         self.bot.add_command("help", self.help)
@@ -72,9 +72,12 @@ class Alkoman:
         if not users:
             self.bot.send_message(chat_id, "Хуй вам, а не опрос")
         else:
+            print("users found")
+
             message = "Конец дня наступил и конец рабочий недели вместе с ним. Рассказывайте, что у вас интересного случилось давайте, чего видели/слышали, есть ли движухи какие. В общем делитесь клёвым и неклёвым тоже\n"
             for i, item in enumerate(users):
                 mentions[item['id']] = item['name']
+                print(f"{item['name']} : {item['id']}")
             
             self.bot.send_message(chat_id, message, mentions=mentions)
 
