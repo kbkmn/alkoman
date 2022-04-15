@@ -19,7 +19,7 @@ class Alkoman:
         self.database = Database(POSTGRESQL_DB_URI)
 
         self.bot.add_job((0, 1, 2, 3, 4, 5, 6), datetime.time(hour=20, minute=59, second=00), lambda context: self.top())
-        self.bot.add_job((4, ), datetime.time(hour=17, minute=43, second=00), lambda context: self.weekend())
+        self.bot.add_job((4, ), datetime.time(hour=17, minute=45, second=00), lambda context: self.weekend())
 
         self.bot.add_command("stat", self.stat)
         self.bot.add_command("help", self.help)
